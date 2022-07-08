@@ -1,28 +1,23 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer} from 'react';
 import Header from './components/Header';
 import Movie from './components/Movie';
 import SearchMovie from './components/SearchMovie';
-import { initialState, reducer } from './store/reducer/index';
+import { initialState, SearchReducer } from './store/reducer/SearchReducer';
 import axios from 'axios';
 import './App.css';
+import { Oval } from 'react-loader-spinner';
 import { SearchActionType } from './interface/SearchAction';
 import { MovieProps } from '@/interface/MovieProps';
+import { SearchCondition } from './interface/SearchCondition';
 
 const MOVIE_API_URL = 'https://www.omdbapi.com/?s=man&apikey=4a3b711b';
 
 const App = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  // const [loading, setLoading] = useState(true);
-  // const [movies, setMovies] = useState([]);
-  // const [errorMessage, setErrorMessage] = useState(null);
+  const [state, dispatch] = useReducer(SearchReducer, initialState);
 
   useEffect(() => {
     axios.get(MOVIE_API_URL)
     .then(jsonResponse => {
-      // setMovies(jsonResponse => {
-      //   setMovies(jsonResponse.Search);
-      //   setLoading(false);
-      // });
       dispatch({
         type: SearchActionType.SEARCH_MOVIES_SUCCESS,
         payload: jsonResponse.data.Search
@@ -34,26 +29,19 @@ const App = () => {
     window.location.reload();
   };
 
-  const search = (searchValue: string) => {
-    // setLoading(true);
-    // setErrorMessage(null);
-
+  const search = (searchCondition: SearchCondition) => {
     dispatch({
       type: SearchActionType.SEARCH_MOVIES_REQUEST
     });
 
-    axios(`https://www.omdbapi.com/?s=${searchValue}&apikey=4a3b711b`)
+    axios(`https://www.omdbapi.com/?s=${searchCondition.Title}&y=${searchCondition.Year}&apikey=4a3b711b`)
     .then(jsonResponse => {
       if (jsonResponse.data.Response === 'True') {
-        // setMovies(jsonResponse.Search);
-        // setLoading(false);
         dispatch({
           type: SearchActionType.SEARCH_MOVIES_SUCCESS,
           payload: jsonResponse.data.Search
         });
       } else {
-        // setErrorMessage(jsonResponse.Error);
-        // setLoading(false);
         dispatch({
           type: SearchActionType.SEARCH_MOVIES_FAILURE,
           error: jsonResponse.data.Error
@@ -66,7 +54,13 @@ const App = () => {
 
   const retrievedMovies =
     loading && !errorMessage ? (
-      <span>loading...</span>
+      <div className="loader">
+        <Oval
+          color='gray'
+          height='3rem'
+          width='3rem'
+        />
+      </div>
     ) : errorMessage ? (
       <div className="errorMessage">{errorMessage}</div>
     ) : (
@@ -80,7 +74,7 @@ const App = () => {
   return (
     <div className="App">
       <div className="m-container">
-        <Header text="HOOKED" />
+        <Header text="Movie Search APP" />
         <SearchMovie search={search} />
         <p className="App-intro">Sharing a few of our favourite movies</p>
         <div className="movies">

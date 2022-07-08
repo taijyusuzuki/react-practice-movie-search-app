@@ -76,8 +76,8 @@
   background-color: transparent;
   color: black;
   border: 1px solid black;
-  width: 80px;
-  margin-left: 5px;
+  width: 2rem;
+  margin-left: 0.5rem;
   cursor: pointer;
 }
 
@@ -91,7 +91,7 @@
   background-color: transparent;
   color: black;
   border: 1px solid black;
-  width: 80px;
+  width: 2rem;
   margin-left: 5px;
   cursor: pointer;
 }
@@ -102,9 +102,24 @@
 }
 
 
-.search-condition-field{
-  width: 40%;
+#search-condition-title {
+  width: 30%;
   min-width: 170px;
+}
+
+#search-condition-year {
+  width: 5%;
+  min-width: 1rem;
+}
+
+.search-condition-item-name {
+  padding: 0.1rem;
+  margin-left: 1rem;
+  margin-right: 0.5rem;
+}
+
+.loader {
+  margin: 0 auto;
 }
 
 @media screen and (min-width: 694px) and (max-width: 915px) {

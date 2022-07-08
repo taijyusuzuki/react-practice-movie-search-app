@@ -10,7 +10,7 @@ export const initialState = {
   errorMessage: ''
 };
 
-export const reducer: Reducer<SearchStore, SearchAction> = (state: SearchStore, action: SearchAction) => {
+export const SearchReducer: Reducer<SearchStore, SearchAction> = (state: SearchStore, action: SearchAction) => {
   switch (action.type) {
     case SearchActionType.SEARCH_MOVIES_REQUEST:
       return {

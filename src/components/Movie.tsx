@@ -1,5 +1,6 @@
 import React from 'react';
 import { MovieProps } from '@/interface/MovieProps';
+import { Link } from 'react-router-dom';
 
 const Movie = ({movie}: {movie: MovieProps}) => {
   const poster = movie.Poster === 'N/A' ? 'No Image' : movie.Poster;
@@ -7,11 +8,13 @@ const Movie = ({movie}: {movie: MovieProps}) => {
   return (
     <div className="movie">
       <div>
-        <h2>{movie.Title}</h2>
+        <nav>
+          <Link to={`/search/${movie.imdbID}`} state={{ movie: movie }}>{movie.Title}</Link>
+        </nav>
         <div>
           <img
             width="200"
-            alt={`The movie titled: ${movie.Title}`}
+            alt={`${movie.Title}`}
             src={poster}
           />
         </div>

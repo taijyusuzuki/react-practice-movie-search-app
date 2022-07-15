@@ -71,24 +71,46 @@
   margin-top: 10px;
 }
 
-input[type=submit] {
-  padding: 5px;
-  background-color: transparent;
-  color: black;
-  border: 1px solid black;
-  width: 80px;
-  margin-left: 5px;
+.MuiSvgIcon-root:hover {
+  color: darkgray;
+}
+
+.search-button {
+  margin-top: -1rem;
+}
+
+#search-condition-title {
+  width: 30%;
+  min-width: 170px;
+  height: 2.5rem;
+}
+
+#search-condition-title::-webkit-search-cancel-button {
   cursor: pointer;
 }
 
-input[type=submit]:hover {
-  background-color: #282c34;
-  color: antiquewhite;
+#search-condition-year {
+  width: 8%;
+  min-width: 1rem;
 }
 
-.search > input[type=text] {
-  width: 40%;
-  min-width: 170px;
+.search-condition-item-name {
+  margin-top: 0.5rem;
+  padding: 0.1rem;
+  padding-left: 1rem;
+  padding-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.required::after {
+  content: " *";
+  color: red;
+  vertical-align: middle;
+  margin-top: 1rem;
+}
+
+.loader {
+  margin: 0 auto;
 }
 
 @media screen and (min-width: 694px) and (max-width: 915px) {

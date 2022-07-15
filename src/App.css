@@ -1,4 +1,4 @@
-.App {
+.search-movie-component {
   text-align: center;
 }
 
@@ -70,52 +70,42 @@
   margin-top: 10px;
 }
 
+.MuiSvgIcon-root:hover {
+  color: darkgray;
+}
 
 .search-button {
-  padding: 5px;
-  background-color: transparent;
-  color: black;
-  border: 1px solid black;
-  width: 2rem;
-  margin-left: 0.5rem;
-  cursor: pointer;
+  margin-top: -1rem;
 }
-
-.search-button:hover {
-  background-color: #282c34;
-  color: antiquewhite;
-}
-
-.reset-button {
-  padding: 5px;
-  background-color: transparent;
-  color: black;
-  border: 1px solid black;
-  width: 2rem;
-  margin-left: 5px;
-  cursor: pointer;
-}
-
-.reset-button:hover {
-  background-color: #282c34;
-  color: antiquewhite;
-}
-
 
 #search-condition-title {
   width: 30%;
   min-width: 170px;
+  height: 2.5rem;
+}
+
+#search-condition-title::-webkit-search-cancel-button {
+  cursor: pointer;
 }
 
 #search-condition-year {
-  width: 5%;
+  width: 8%;
   min-width: 1rem;
 }
 
 .search-condition-item-name {
+  margin-top: 0.5rem;
   padding: 0.1rem;
-  margin-left: 1rem;
-  margin-right: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.required::after {
+  content: ' *';
+  color: red;
+  vertical-align: middle;
+  margin-top: 1rem;
 }
 
 .loader {

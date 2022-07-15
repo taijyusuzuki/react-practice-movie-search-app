@@ -4,4 +4,4 @@ export interface SearchStore {
   loading: boolean,
   movies: MovieProps[],
   errorMessage?: string
-}
+};

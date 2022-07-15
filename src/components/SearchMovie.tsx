@@ -1,72 +1,82 @@
-import React, { useState } from 'react';
-import { GoSearch } from 'react-icons/go';
-import { MdClear } from 'react-icons/md';
+import React, { useEffect, useReducer} from 'react';
+import Movie from './Movie';
+import SearchConditionInput from './SearchConditionInput';
+import { initialState, SearchReducer } from '../store/reducer/SearchReducer';
+import axios from 'axios';
+import { Oval } from 'react-loader-spinner';
+import { SearchActionType } from '../interface/SearchAction';
+import { MovieProps } from '@/interface/MovieProps';
 import { SearchCondition } from '@/interface/SearchCondition';
-import options from '../data/Options';
+import { Outlet } from 'react-router-dom';
 
-const SearchMovie = ({search}: {search: (searchCondition: SearchCondition) => void}) => {
-  const initialState = {
-    Title: '',
-    Year: ''
+const INIT_SEARCH_URL = 'https://www.omdbapi.com/?s=transformers&apikey=4a3b711b';
+
+const SearchMovie = () => {
+  const [state, dispatch] = useReducer(SearchReducer, initialState);
+
+  useEffect(() => {
+    axios.get(INIT_SEARCH_URL)
+    .then(jsonResponse => {
+      dispatch({
+        type: SearchActionType.SEARCH_MOVIES_SUCCESS,
+        payload: jsonResponse.data.Search
+      });
+    });
+  }, []);
+
+  const search = (searchCondition: SearchCondition) => {
+    dispatch({
+      type: SearchActionType.SEARCH_MOVIES_REQUEST
+    });
+
+    axios(`https://www.omdbapi.com/?s=${searchCondition.Title}&y=${searchCondition.Year}&apikey=4a3b711b`)
+    .then(jsonResponse => {
+      if (jsonResponse.data.Response === 'True') {
+        dispatch({
+          type: SearchActionType.SEARCH_MOVIES_SUCCESS,
+          payload: jsonResponse.data.Search
+        });
+      } else {
+        dispatch({
+          type: SearchActionType.SEARCH_MOVIES_FAILURE,
+          error: jsonResponse.data.Error
+        });
+      }
+    });
   };
 
-  const [searchCondition, setSearchCondition] = useState(initialState);
+  const { movies, errorMessage, loading } = state;
 
-  const handleSearchInputChanges = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchCondition({...searchCondition, [e.target.name]: e.target.value})
-  };
-
-  const handleSearchSelectChanges = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSearchCondition({...searchCondition, [e.target.name]: e.target.value})
-  }
-
-  const resetInputField = () => {
-    setSearchCondition(initialState);
-  };
-
-  const callSearchFunction = (e: React.MouseEvent<SVGElement>) => {
-    e.preventDefault();
-    search(searchCondition);
-  };
+  const retrievedMovies =
+    loading && !errorMessage ? (
+      <div className="loader">
+        <Oval
+          color='gray'
+          height='3rem'
+          width='3rem'
+        />
+      </div>
+    ) : errorMessage ? (
+      <div className="errorMessage">{errorMessage}</div>
+    ) : (
+      movies.map((movie: MovieProps, index: number) => {
+        return (
+          <Movie key={`${index}-${movie.imdbID}`} movie={movie} />
+        )
+      })
+    );
 
   return (
-    <form className="search">
-      <text className="search-condition-item-name">Title:</text>
-      <input
-        id="search-condition-title"
-        name="Title"
-        value={searchCondition.Title}
-        onChange={handleSearchInputChanges}
-        type="text"
-        placeholder="Title"
-      />
-      <text className="search-condition-item-name">Year:</text>
-      <select
-        id="search-condition-year"
-        name="Year"
-        value={searchCondition.Year}
-        onChange={handleSearchSelectChanges}
-        placeholder="YYYY"
-      >
-        {options.map((option) => {
-          return (
-            <option value={option.value}>{option.label}</option>
-          )
-        })}
-      </select>
-      <GoSearch
-        className="search-button"
-        onClick={callSearchFunction}
-        type="submit"
-        size='2rem'
-      />
-      <MdClear
-        className="reset-button"
-        onClick={resetInputField}
-        type="button"
-        size='2rem'
-      />
-    </form>
+    <div className="search-movie-component">
+      <div className="m-container">
+        <SearchConditionInput search={search} />
+        <p className="App-intro">Sharing a few of our favourite movies</p>
+        <div className="movies">
+          {retrievedMovies}
+        </div>
+      </div>
+      <Outlet />
+    </div>
   );
 };
 
